@@ -1,18 +1,44 @@
+import json
 import selectors
 import socket
 import logging
 import time
+import requests
 from hashlib import sha1
-import multiprocessing
 from lxml import etree
+
+LOG_FORMAT = "%(asctime)s - %(funcName)s - %(processName)s - %(thread)s	 - %(message)s - %(msecs)d"
+DATE_FORMAT = "%Y/%m/%d %H:%M:%S %p"
+logging.basicConfig(level=logging.DEBUG, format=LOG_FORMAT, datefmt=DATE_FORMAT)
 
 TOKEN = "weixingongzhonghao"
 EncodingAESKey = "UaohLPWNrrgCfIQvgBGWLZnCrpAktoNF3jhue6SVgLW"
 
+
+
 class MYRequestHandler:
         disable_nagle_algorithm = True  # https://blog.csdn.net/themagickeyjianan/article/details/53736445
         protocol_version = 'HTTP/1.1'
+        TouringID = "4fd840e39b5a4ca8950a5c956e77dab7"
         param = {}
+        head = {
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36"
+        }
+        data = {
+                "reqType": 0,
+                "perception": {
+                        "inputText": {
+                                "text": ""
+                        }
+                },
+                "userInfo": {
+                        "apiKey": TouringID,
+                        "userId": ""
+                }
+        }
+
+
+        TouringInterface = "http://openapi.tuling123.com/openapi/api/v2"
 
         def __init__(self):
                 pass
@@ -50,8 +76,8 @@ class MYRequestHandler:
                 logging.debug(f"[MyHandler.checkSignature] TemporaryStr = {TemporaryStr}")
                 return signature == TemporaryStr
 
-        def handle_one_request(self, buffer:str):
-                print("handle")
+        def handle_one_request(self, buffer: str):
+                logging.debug(f"[handle_one_request] buf {buffer}")
                 self.raw_requestlines = buffer.split('\r\n')
                 print(self.raw_requestlines)
                 if not self.raw_requestlines:
@@ -106,7 +132,7 @@ class MYRequestHandler:
                 headers = []
                 try:
                         while True:
-                                line =  self.raw_requestlines.pop(0)
+                                line = self.raw_requestlines.pop(0)
                                 headers.append(line)
                                 if line in ('', '\r\n', '\n'):
                                         break
@@ -152,8 +178,8 @@ class MYRequestHandler:
                 self.dict_header("Server", "Zjx_HttpServer")
                 self.dict_header("Date", time.strftime('%Y.%m.%d %H:%M:%S', time.localtime(time.time())))
 
-                if type(dic)=="dict":
-                        for key,value in dic.items():
+                if type(dic) == "dict":
+                        for key, value in dic.items():
                                 self.dict_header(key, value)
 
                 self._headers_buffer.append("\r\n")
@@ -172,9 +198,9 @@ class MYRequestHandler:
                         ("%s: %s\r\n" % (keyword, value)))
 
         def Response(self, body="", code=200, message="OK"):
-                dic = {'Content-Type':'text/xml'}
+                dic = {'Content-Type': 'text/xml'}
                 headersText = self.normal_headers(code, message, dic)
-                sendMes = headersText+body
+                sendMes = headersText + body
                 return sendMes
 
         def do_GET(self):
@@ -183,20 +209,44 @@ class MYRequestHandler:
 
         def do_POST(self):
                 XmlText = "".join(self.raw_requestlines)
-                root = etree.XML(XmlText)
-                dataDict = {
-                        "ToUserName": self.getParams("openid"),
-                        "FromUserName": root.find("ToUserName").text,
-                        "CreateTime": int(time.time()),
-                        "MsgType": "text",
-                        "Content": root.find("Content").text,
-                }
-                data = self.create_xml(dataDict)
-                return self.Response(data)
+                userInfo = etree.XML(XmlText)
+                cli_type = userInfo.find("MsgType").text
+                logging.debug(f"[do_post] cli_type = {cli_type}")
+                if cli_type == "text":
+                        ret_text = self.send_to_Turing(userInfo.find("Content").text)
+
+                        dataDict = {
+                                "ToUserName": self.getParams("openid"),
+                                "FromUserName": userInfo.find("ToUserName").text,
+                                "CreateTime": int(time.time()),
+                                "MsgType": "text",
+                                "Content": ret_text,
+                        }
+
+                        data = self.create_xml(dataDict)
+                        return self.Response(data)
+
+        def send_to_Turing(self, msg_from_cli: str):
+                logging.debug(f"[send_to_Turing] msg = {msg_from_cli}")
+
+                self.data["perception"]["inputText"]["text"] = msg_from_cli
+                self.data["userInfo"]["userId"] = self.getParams("openid")
+                logging.debug(f"[send_to_Turing] data = {self.data}")
+                req = requests.post(self.TouringInterface, json=self.data, headers=self.headers)
+                TouringRSP = json.loads(req.text)
+                logging.debug(f"[MyHandler.send_to_Turing] send_to_Turing = {req.text}")
+                try:
+                        TouringText = TouringRSP["results"][0]["values"]["text"]
+                        return TouringText
+                except:
+                        return "TouringBUUUUG!!!"
+
 
 
 handle = MYRequestHandler()
-def handleRequest(buffer:str):
+
+
+def handleRequest(buffer: str):
         sendMes = str(handle.handle_one_request(buffer))
         print(sendMes)
         return sendMes
