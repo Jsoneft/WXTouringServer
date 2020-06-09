@@ -3,8 +3,9 @@ import selectors
 import socket
 import logging
 import time
+import bot
 import requests
-from hashlib import sha1
+from hashlib import sha1, md5
 from lxml import etree
 
 LOG_FORMAT = "%(asctime)s - %(funcName)s - %(processName)s - %(thread)s	 - %(message)s - %(msecs)d"
@@ -13,7 +14,6 @@ logging.basicConfig(level=logging.DEBUG, format=LOG_FORMAT, datefmt=DATE_FORMAT)
 
 TOKEN = "weixingongzhonghao"
 EncodingAESKey = "UaohLPWNrrgCfIQvgBGWLZnCrpAktoNF3jhue6SVgLW"
-
 
 
 class MYRequestHandler:
@@ -36,7 +36,6 @@ class MYRequestHandler:
                         "userId": ""
                 }
         }
-
 
         TouringInterface = "http://openapi.tuling123.com/openapi/api/v2"
 
@@ -74,6 +73,7 @@ class MYRequestHandler:
                 TemporaryStr = "".join(TemporaryList)
                 TemporaryStr = sha1(TemporaryStr.encode('utf-8')).hexdigest()
                 logging.debug(f"[MyHandler.checkSignature] TemporaryStr = {TemporaryStr}")
+
                 return signature == TemporaryStr
 
         def handle_one_request(self, buffer: str):
@@ -102,10 +102,10 @@ class MYRequestHandler:
 
         def parse_request(self):
                 """
-                The request should be stored in self.raw_requestline;
-                The results are in self.command, self.path, self.request_version and
-                self.headers.
-                """
+                        The request should be stored in self.raw_requestline;
+                        The results are in self.command, self.path, self.request_version and
+                        self.headers.
+                        """
                 # raw_requestline = b'GET / HTTP/1.1\r\n'
                 requestline = self.raw_requestlines.pop(0)
                 # https://baike.baidu.com/item/ISO-8859-1/7878872?fr=aladdin
@@ -167,11 +167,11 @@ class MYRequestHandler:
 
         def normal_headers(self, code, message, dic=None):
                 '''
-                创建一般报文头部.
-                :param code:
-                :param message:
-                :return:
-                '''
+                        创建一般报文头部.
+                        :param code:
+                        :param message:
+                        :return:
+                        '''
                 self._headers_buffer = []
                 self._headers_buffer.append(("%s %d %s\r\n" %
                                              (self.protocol_version, code, message)))
@@ -187,11 +187,11 @@ class MYRequestHandler:
 
         def dict_header(self, keyword, value):
                 '''
-                通过key,value创建报文.
-                :param keyword:
-                :param value:
-                :return:
-                '''
+                        通过key,value创建报文.
+                        :param keyword:
+                        :param value:
+                        :return:
+                        '''
                 if not hasattr(self, '_headers_buffer'):
                         self._headers_buffer = []
                 self._headers_buffer.append(
@@ -213,6 +213,10 @@ class MYRequestHandler:
                 cli_type = userInfo.find("MsgType").text
                 logging.debug(f"[do_post] cli_type = {cli_type}")
                 if cli_type == "text":
+                        ret = bot.do_specialText(userInfo)
+                        if ret != "":
+                                return self.Response(ret+'\r\n')
+
                         ret_text = self.send_to_Turing(userInfo.find("Content").text)
 
                         dataDict = {
@@ -228,9 +232,10 @@ class MYRequestHandler:
 
         def send_to_Turing(self, msg_from_cli: str):
                 logging.debug(f"[send_to_Turing] msg = {msg_from_cli}")
-
+                encrypt_openID = md5(self.param["openid"].encode('utf-8')).hexdigest()
+                logging.debug(f"[send_to_Turing] encrypt_openID = {encrypt_openID}")
                 self.data["perception"]["inputText"]["text"] = msg_from_cli
-                self.data["userInfo"]["userId"] = self.getParams("openid")
+                self.data["userInfo"]["userId"] = encrypt_openID
                 logging.debug(f"[send_to_Turing] data = {self.data}")
                 req = requests.post(self.TouringInterface, json=self.data, headers=self.headers)
                 TouringRSP = json.loads(req.text)
@@ -240,7 +245,6 @@ class MYRequestHandler:
                         return TouringText
                 except:
                         return "TouringBUUUUG!!!"
-
 
 
 handle = MYRequestHandler()
