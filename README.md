@@ -13,7 +13,7 @@ upd 2020.6.12:实现用户请求打给图灵机器人接口  初步实现对话�
 
 应用图集:
 
-<img src="https://s1.ax1x.com/2020/06/12/tXMRr8.jpg" alt="tXMRr8.jpg" style="zoom:40%;" />](https://s1.ax1x.com/2020/06/12/tXMeg0.jpg)
-<img src="https://s1.ax1x.com/2020/06/12/tXMRr8.jpg" alt="tXMRr8.jpg" style="zoom:40%;" />](https://imgchr.com/i/tXMRr8)
-<img src="https://s1.ax1x.com/2020/06/12/tXMRr8.jpg" alt="tXMRr8.jpg" style="zoom:40%;" />](https://imgchr.com/i/tXMWqS)
+<img src="https://s1.ax1x.com/2020/06/12/tXMRr8.jpg" alt="tXMRr8.jpg" style="zoom:20%;" />]
+<img src="https://s1.ax1x.com/2020/06/12/tXMRr8.jpg" alt="tXMRr8.jpg" style="zoom:20%;" />]
+<img src="https://s1.ax1x.com/2020/06/12/tXMRr8.jpg" alt="tXMRr8.jpg" style="zoom:20%;" />]
 
