@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="1a530e8a-225f-44cf-9204-772777601d00" name="ten_box" url="http://175.24.114.10">
+        <fileTransfer rootFolder="/root/repo/formaledition" accessType="SFTP" host="175.24.114.10" port="22" sshConfigId="728f22a5-ee50-4b93-9c08-acb204638a95" sshConfig="ten_box">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

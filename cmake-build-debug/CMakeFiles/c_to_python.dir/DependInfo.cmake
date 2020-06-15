@@ -4,14 +4,14 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/Users/flysky/CLionProjects/socketServerCplus/main.cpp" "/Users/flysky/CLionProjects/socketServerCplus/cmake-build-debug/CMakeFiles/c_to_python.dir/main.cpp.o"
-  "/Users/flysky/CLionProjects/socketServerCplus/server.cpp" "/Users/flysky/CLionProjects/socketServerCplus/cmake-build-debug/CMakeFiles/c_to_python.dir/server.cpp.o"
+  "C:/Users/Jason.Z/CLionProjects/WXTouringServer/main.cpp" "C:/Users/Jason.Z/CLionProjects/WXTouringServer/cmake-build-debug/CMakeFiles/c_to_python.dir/main.cpp.obj"
+  "C:/Users/Jason.Z/CLionProjects/WXTouringServer/server.cpp" "C:/Users/Jason.Z/CLionProjects/WXTouringServer/cmake-build-debug/CMakeFiles/c_to_python.dir/server.cpp.obj"
   )
-set(CMAKE_CXX_COMPILER_ID "AppleClang")
+set(CMAKE_CXX_COMPILER_ID "GNU")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "/Library/Frameworks/Python.framework/Versions/3.7/include/python3.7m"
+  "C:/Users/Jason.Z/AppData/Local/Programs/Python/Python38-32/include"
   )
 
 # Targets to which this target links.

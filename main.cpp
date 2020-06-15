@@ -25,7 +25,7 @@
 //    PyRun_SimpleString("sys.path.append('./')");    //将当前目录添加到python路径
 //    PyObject *pModule = NULL;    //python模块
 //
-//    if( !(pModule = PyImport_ImportModule("simple") ) ){
+//    if( !(pModule = PyImport_ImportModule("handle") ) ){
 //        return -1;
 //    }
 //    PyObject *dic = PyModule_GetDict(pModule);
@@ -61,7 +61,7 @@ int main(int argc,char* argv[])
     PyRun_SimpleString("sys.path.append('./')");    //将当前目录添加到python路径
     PyObject *pModule = NULL;    //python模块
 
-    if( !(pModule = PyImport_ImportModule("simple") ) ){
+    if( !(pModule = PyImport_ImportModule("handle") ) ){
         printf("ImportModule failed");//打印错误信息，库函数
         return -1;
     }
