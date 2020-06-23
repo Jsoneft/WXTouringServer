@@ -92,6 +92,7 @@ int main(int argc,char* argv[])
     if(-1==ret)
     {
         perror("bind");
+
         return -1;
     }
     printf("I am here\n");
@@ -147,12 +148,16 @@ int main(int argc,char* argv[])
                     if (ret <= 0) {
                         printf("Server:您未输入任何信息，请重新输入!\n");//输入为空的处理
                     }
-                    close(new_fd);
+                    ret = close(new_fd);
+                    if(ret == -1){
+                        printf("服务端关闭请求失败\n");
+                    }
+
                     FD_CLR(new_fd, &tmpset);
                     std::cout << "关闭客户端连接" << std::endl;
                 } else if (0 == ret) {
                     printf("byebye,客户端已下线!\n");
-                    close(new_fd);
+//                    close(new_fd);
                     FD_CLR(new_fd, &tmpset);//从集合当中移除该new_fd
                 }
             }

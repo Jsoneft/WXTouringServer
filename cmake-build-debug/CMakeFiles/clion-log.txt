@@ -1,19 +1,16 @@
-"D:\Program Files\JetBrains\CLion 2019.2.5\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - MinGW Makefiles" C:\Users\Jason.Z\CLionProjects\WXTouringServer
--- The C compiler identification is GNU 7.3.0
--- The CXX compiler identification is GNU 7.3.0
--- Check for working C compiler: C:/mingw64/bin/gcc.exe
--- Check for working C compiler: C:/mingw64/bin/gcc.exe -- works
--- Detecting C compiler ABI info
--- Detecting C compiler ABI info - done
--- Detecting C compile features
--- Detecting C compile features - done
--- Check for working CXX compiler: C:/mingw64/bin/g++.exe
--- Check for working CXX compiler: C:/mingw64/bin/g++.exe -- works
--- Detecting CXX compiler ABI info
--- Detecting CXX compiler ABI info - done
--- Detecting CXX compile features
--- Detecting CXX compile features - done
--- Found PythonLibs: C:/Users/Jason.Z/AppData/Local/Programs/Python/Python38-32/python38.dll (found version "3.8.2") 
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Users/jason/OneDrive/my_projects/FUCK_THE_CPP_EXPERIMENT/WXTouringServer
 -- Configuring done
--- Generating done
--- Build files have been written to: C:/Users/Jason.Z/CLionProjects/WXTouringServer/cmake-build-debug
+CMake Error at CMakeLists.txt:12 (add_executable):
+  Cannot find source file:
+
+    cmake-build-debug/threadpool.h
+
+  Tried extensions .c .C .c++ .cc .cpp .cxx .cu .m .M .mm .h .hh .h++ .hm
+  .hpp .hxx .in .txx
+
+
+CMake Error at CMakeLists.txt:12 (add_executable):
+  No SOURCES given to target: c_to_python
+
+
+CMake Generate step failed.  Build files cannot be regenerated correctly.

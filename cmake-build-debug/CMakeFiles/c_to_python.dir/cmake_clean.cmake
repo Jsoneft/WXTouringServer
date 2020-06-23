@@ -1,10 +1,9 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/c_to_python.dir/main.cpp.obj"
-  "CMakeFiles/c_to_python.dir/server.cpp.obj"
-  "c_to_python.exe"
-  "c_to_python.exe.manifest"
+  "CMakeFiles/c_to_python.dir/main.cpp.o"
+  "CMakeFiles/c_to_python.dir/test.cpp.o"
+  "CMakeFiles/c_to_python.dir/util.cpp.o"
+  "c_to_python"
   "c_to_python.pdb"
-  "libc_to_python.dll.a"
 )
 
 # Per-language clean rules from dependency scanning.

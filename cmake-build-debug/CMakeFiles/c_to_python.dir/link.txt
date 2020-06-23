@@ -1,3 +1,1 @@
-"D:\Program Files\JetBrains\CLion 2019.2.5\bin\cmake\win\bin\cmake.exe" -E remove -f CMakeFiles\c_to_python.dir/objects.a
-C:\mingw64\bin\ar.exe cr CMakeFiles\c_to_python.dir/objects.a @CMakeFiles\c_to_python.dir\objects1.rsp
-C:\mingw64\bin\g++.exe -g   -Wl,--whole-archive CMakeFiles\c_to_python.dir/objects.a -Wl,--no-whole-archive  -o c_to_python.exe -Wl,--out-implib,libc_to_python.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\c_to_python.dir\linklibs.rsp
+/Library/Developer/CommandLineTools/usr/bin/c++  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/c_to_python.dir/main.cpp.o CMakeFiles/c_to_python.dir/util.cpp.o CMakeFiles/c_to_python.dir/test.cpp.o  -o c_to_python  /usr/lib/libpython2.7.dylib 

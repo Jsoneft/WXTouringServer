@@ -4,14 +4,15 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "C:/Users/Jason.Z/CLionProjects/WXTouringServer/main.cpp" "C:/Users/Jason.Z/CLionProjects/WXTouringServer/cmake-build-debug/CMakeFiles/c_to_python.dir/main.cpp.obj"
-  "C:/Users/Jason.Z/CLionProjects/WXTouringServer/server.cpp" "C:/Users/Jason.Z/CLionProjects/WXTouringServer/cmake-build-debug/CMakeFiles/c_to_python.dir/server.cpp.obj"
+  "/Users/jason/OneDrive/my_projects/FUCK_THE_CPP_EXPERIMENT/WXTouringServer/main.cpp" "/Users/jason/OneDrive/my_projects/FUCK_THE_CPP_EXPERIMENT/WXTouringServer/cmake-build-debug/CMakeFiles/c_to_python.dir/main.cpp.o"
+  "/Users/jason/OneDrive/my_projects/FUCK_THE_CPP_EXPERIMENT/WXTouringServer/cmake-build-debug/test.cpp" "/Users/jason/OneDrive/my_projects/FUCK_THE_CPP_EXPERIMENT/WXTouringServer/cmake-build-debug/CMakeFiles/c_to_python.dir/test.cpp.o"
+  "/Users/jason/OneDrive/my_projects/FUCK_THE_CPP_EXPERIMENT/WXTouringServer/util.cpp" "/Users/jason/OneDrive/my_projects/FUCK_THE_CPP_EXPERIMENT/WXTouringServer/cmake-build-debug/CMakeFiles/c_to_python.dir/util.cpp.o"
   )
-set(CMAKE_CXX_COMPILER_ID "GNU")
+set(CMAKE_CXX_COMPILER_ID "AppleClang")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "C:/Users/Jason.Z/AppData/Local/Programs/Python/Python38-32/include"
+  "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/include/python2.7"
   )
 
 # Targets to which this target links.
