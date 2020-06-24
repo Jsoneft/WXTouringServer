@@ -383,7 +383,8 @@ def handleRequest(buffer: str):
     :return: 发送给客户端的信息
     """
     # 调用类中的函数
+    logging.debug("PY : handleRequest started!")
     sendMes = str(handle.handle_one_request(buffer))
-    print(sendMes)
+    logging.debug(f"returned sendMsg : {sendMes}")
     # 返回需要发送给客户端的信息
     return sendMes

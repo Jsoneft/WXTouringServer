@@ -1,6 +1,7 @@
 import datetime
 import time
 import message_xml
+import logging
 import crawler
 import searchData
 
@@ -18,7 +19,6 @@ def deal_time(words, article):
     article.append_Description("Content", time.strftime('(ﾉ´ヮ´)ﾉ*:･ﾟ✧\n现在的时间是 %Y.%m.%d %H:%M:%S 哦\n(๑^ں^๑)', time.localtime(time.time())))
     return True
 
-
 def deal_sticker(words, article):
     """
     deal with sticker in the WeChat User command.
@@ -27,25 +27,47 @@ def deal_sticker(words, article):
     :return: function do correct/fail
     """
     if len(words) != 2:
-        return False
+        # 表示微信返回内容为text格式
+        article.MsgType("text")
+        # 添加内容
+        article.append_Description("Content", "关键词太多了啦")
+        return True
     else:
         # 获得图片的Bytes，并进行处理
         # WeChat限制， 一次最多只有一张图片能够显示， 故设置过多的图片没有意义
-        picBytes = crawler.get_pix_by_key(words[1])
-        pic_dicList = []
+        logging.debug(f"[crawlerGet]:{time.time()}")
+        pic_contents = crawler.get_pix_by_key(words[1])
+        logging.debug(f"[crawlerGet]:{time.time()}")
+        logging.debug(f"[crawlerGet pic len]:{len(pic_contents)}")
+        if pic_contents is None:
+            # 表示微信返回内容为text格式
+            article.MsgType("text")
+            # 添加内容
+            article.append_Description("Content", "没有获取到表情包QAQ")
+            return True
 
+        pic_dicList = []
         # 获取图片的id
-        for picByte in picBytes:
+        for pic_content in pic_contents:
             # 将图片发送给WeChat， 返回一个微信服务器上对应图片的id
-            picID = article.send_WXpic(picByte)
+            picID = article.send_WXpic(pic_content)
             # 将其追加到list中
-            pic_dicList.append({"MediaId":picID})
+            if picID != "":
+                pic_dicList.append({"MediaId":picID})
+
+        if not pic_dicList:
+            # 表示微信返回内容为text格式
+            article.MsgType("text")
+            # 添加内容
+            article.append_Description("Content", "没有获取到表情包QAQ")
+            return True
 
         # 表示微信返回内容为image格式
         article.MsgType("image")
         # 添加内容
         article.append_Description("Image",pic_dicList)
         return True
+
 
 
 def deal_todo(words, article):
@@ -72,7 +94,7 @@ def deal_todo(words, article):
     #         s = time.strftime('%Y.%m.%d %H:%M:%S ', time.localtime(time.time()))
     #         lark.send_message(access_token, event.get("open_id"),
     #                           "current time is: {}\n{} second(s) left".format(s, left_s))
-    #         print("[commands.deal_todo] current time is: " + s, "%d second(s) left" % left_s)
+    #         logging.debug("[commands.deal_todo] current time is: " + s, "%d second(s) left" % left_s)
     #         pass
 
 

@@ -1,6 +1,7 @@
 import time
 import os
 from lxml import etree
+import logging
 import requests
 
 # 设置发送给微信服务器的头部
@@ -124,23 +125,30 @@ class Message():
             # 失败返回空字符串
             return ""
 
-    def send_WXpic(self,picByte):
+    def send_WXpic(self, pic_content):
         """
         将图片picByte发送给微信服务器
-        :param picByte:bstr类型，需要发送到微信服务器的图片
+        :param pic_content:bstr类型，需要发送到微信服务器的图片
         :return:微信的media_id
         """
         # 设置微信发送的参数
         param = {
-            "access_token":self.get_accessToken(),
-            "type":"image"
+            "access_token": self.get_accessToken(),
+            "type": "image"
         }
         # 将图片临时存入缓存
         # 本地测试可以修改为自己的目录
         # "/tmp/WXtempIMG.jpg"为服务器所使用的临时目录
-        with open("/tmp/WXtempIMG.jpg","wb") as f:
-            f.write(picByte)
-        response = requests.post("http://file.api.weixin.qq.com/cgi-bin/media/upload",params = param,files={"picpath":open("/tmp/WXtempIMG.jpg","rb")})
+        mediatype = pic_content.url.split('.')[-1]
+        with open(f"/tmp/WXtempIMG.{mediatype}", "wb") as f:
+            f.write(pic_content.content)
+        try:
+            logging.debug(f" upload pix to WX start:{time.time()}")
+            response = requests.post("http://file.api.weixin.qq.com/cgi-bin/media/upload",params = param,files={"picpath":open(f"/tmp/WXtempIMG.{mediatype}", "rb")}, timeout=2)
+            logging.debug(f" upload pix to WX done:{time.time()}")
+        except:
+            logging.debug("POST getPicId failed by timeout")
+            return ""
         # 将获取到的response解析为json
         resJson = response.json()
 
@@ -150,11 +158,11 @@ class Message():
         except:
             # 失败尝试获取错误信息
             try:
-                print(resJson["errmsg"])
+                logging.debug(resJson["errmsg"])
                 return ""
             except:
                 # 获取错误信息失败表示POST失败
-                print("POST getPicId Faild")
+                logging.debug("POST getPicId Faild")
                 return ""
 
 
@@ -225,9 +233,9 @@ class Message():
             try:
                 # 尝试获取errmsg
                 errmsg = tokenJson["errmsg"]
-                print(errmsg)
+                logging.debug(errmsg)
                 return False
             except:
                 # GET请求失败
-                print("GET access_token FROM WX faild")
+                logging.debug("GET access_token FROM WX faild")
                 return False

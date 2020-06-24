@@ -3,6 +3,8 @@
 //
 
 #include "threadpool.h"
+#include "py_middleware.h"
+#include <ctime>
 
 /**
  *  @struct threadpool
@@ -83,7 +85,10 @@ void *ThreadPool::threadpool_thread(void *args) {
         count--;
         pthread_mutex_unlock(&lock);
         // 执行函数
+        clock_t st = clock();
         (task.fun)(task.args);
+        clock_t ed = clock();
+        printf("任务间隔时间： %lu ms\n", (ed - st)*1000/CLOCKS_PER_SEC);
     }
 
     started--;
@@ -181,4 +186,10 @@ int ThreadPool::threadpool_destroy(ShutDownOption shutDownOption) {
         threadpool_free();
     }
     return err;
+}
+
+void myHandler(std::shared_ptr<void> req)
+{
+    std::shared_ptr<py_middleware> request = std::static_pointer_cast<py_middleware>(req);
+    request->handle();
 }

@@ -48,9 +48,10 @@ struct ThreadPoolTask
  *  @var started      Number of started threads
  */
 void myHandler(std::shared_ptr<void> req);
+
 class ThreadPool
 {
-private:
+public:
     static pthread_mutex_t lock;
     static pthread_cond_t notify;
     static std::vector<pthread_t> threads;
