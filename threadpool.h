@@ -64,6 +64,9 @@ public:
     static int count;
     static int shutdown;
     static int started;
+    static int running_threads;
+    static int waiting_threads;
+
 public:
     static int threadpool_create(int _thread_count, int _queue_size);
     static int threadpool_add(const std::shared_ptr<void>& args, const std::function<void(std::shared_ptr<void>)>& fun = myHandler);

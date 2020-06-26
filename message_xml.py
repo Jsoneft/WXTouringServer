@@ -139,15 +139,20 @@ class Message():
         # 将图片临时存入缓存
         # 本地测试可以修改为自己的目录
         # "/tmp/WXtempIMG.jpg"为服务器所使用的临时目录
-        mediatype = pic_content.url.split('.')[-1]
-        with open(f"/tmp/WXtempIMG.{mediatype}", "wb") as f:
-            f.write(pic_content.content)
         try:
-            logging.debug(f" upload pix to WX start:{time.time()}")
-            response = requests.post("http://file.api.weixin.qq.com/cgi-bin/media/upload",params = param,files={"picpath":open(f"/tmp/WXtempIMG.{mediatype}", "rb")}, timeout=2)
-            logging.debug(f" upload pix to WX done:{time.time()}")
-        except:
-            logging.debug("POST getPicId failed by timeout")
+            mediatype = pic_content.url.split('.')[-1]
+            with open(f"/tmp/WXtempIMG.{mediatype}", "wb") as f:
+                f.write(pic_content.content)
+            logging.debug(f"upload pix to WX start:{time.time()}")
+            logging.info(f"upload pix mediatype:{mediatype}, content-size:{len(pic_content.content)}")
+            response = requests.post("http://file.api.weixin.qq.com/cgi-bin/media/upload",params=param,files={"picpath":open(f"/tmp/WXtempIMG.{mediatype}", "rb")}, verify=False, timeout=1.5)
+            logging.debug(f"upload pix to WX done:{time.time()}")
+        except Exception as e:
+            # 访问异常的错误编号和详细信息
+            logging.warning("POST to WXServer failed")
+            logging.info(f"POST to WXServer {e.args}")
+            logging.info(f"POST to WXServer {str(e)}")
+            logging.info(f"POST to WXServer {repr(e)}")
             return ""
         # 将获取到的response解析为json
         resJson = response.json()

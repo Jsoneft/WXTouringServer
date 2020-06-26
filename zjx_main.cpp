@@ -73,6 +73,8 @@ int main(int argc,char* argv[]) {
     // 忽略sigpipe信号 -> Broken pipe 进程不终止
     handle_for_sigpipe();
     Py_Initialize();
+    PyEval_InitThreads();
+
     if (!Py_IsInitialized()) {
         printf("Python init failed!\n");
         PyErr_Print();//打印错误信息，库函数
@@ -124,13 +126,14 @@ int main(int argc,char* argv[]) {
 
     printf("event epoll started\n");
     printf("listen_fd = %d\n", listen_fd);
+
+    Py_BEGIN_ALLOW_THREADS
     int ss = 0;
     while (true) {
         //sleep(10);
         printf("%d th loop\n", ss++);
         printf("有 %d 个待提交的任务\n", ThreadPool::count);
-        printf("有 %d 个正在运行的线程\n",ThreadPool::started+1);
-        printf("有 %d 个创建了的线程\n", ThreadPool::thread_count);
+        printf("有 %d 个running的线程\n",ThreadPool::thread_count - ThreadPool::waiting_threads);
         int ready_num = Epoll::zjx_epoll_wait(listen_fd, MAXEVENTS, ZJX_TIMEOUT);
         if (ready_num == -1) {
             perror(" wait ended badly");
@@ -169,6 +172,7 @@ int main(int argc,char* argv[]) {
         }
     }
 
+    Py_END_ALLOW_THREADS
     close(listen_fd);
     Epoll::epoll_del(listen_fd);
     ThreadPool::threadpool_destroy();

@@ -35,17 +35,18 @@ def deal_sticker(words, article):
     else:
         # 获得图片的Bytes，并进行处理
         # WeChat限制， 一次最多只有一张图片能够显示， 故设置过多的图片没有意义
-        logging.debug(f"[crawlerGet]:{time.time()}")
+        logging.debug(f"[crawlerStartGet]:{time.time()}")
         pic_contents = crawler.get_pix_by_key(words[1])
-        logging.debug(f"[crawlerGet]:{time.time()}")
-        logging.debug(f"[crawlerGet pic len]:{len(pic_contents)}")
+        logging.debug(f"[crawlerFinishGet]:{time.time()}")
+
         if pic_contents is None:
+            logging.debug(f"[crawlerGet pic]:not get")
             # 表示微信返回内容为text格式
             article.MsgType("text")
             # 添加内容
             article.append_Description("Content", "没有获取到表情包QAQ")
             return True
-
+        logging.debug(f"[crawlerGet pic len]:{len(pic_contents)}")
         pic_dicList = []
         # 获取图片的id
         for pic_content in pic_contents:

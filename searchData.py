@@ -1,12 +1,12 @@
 from docx import Document
 from fuzzywuzzy import fuzz
 
-
+document = Document("TiKu.docx")
 # 从题库搜索题目
 def search(searchStr: str):
     # 尝试打开题库
     try:
-        document = Document("TiKu.docx")
+        global document
         # 初始设定
         # count：匹配题目数
         # reSearch：是否为重新搜索模式

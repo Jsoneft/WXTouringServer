@@ -33,6 +33,8 @@ int ThreadPool::tail = 0;
 int ThreadPool::count = 0;
 int ThreadPool::shutdown = 0;
 int ThreadPool::started = 0;
+int ThreadPool::running_threads = 0;
+int ThreadPool::waiting_threads = 0;
 
 // 创建一个线程池
 int ThreadPool::threadpool_create(int _thread_count, int _queue_size) {
@@ -57,7 +59,6 @@ int ThreadPool::threadpool_create(int _thread_count, int _queue_size) {
         }
         ++started;
         ++thread_count;
-
     }
     return 0;
 }
@@ -71,7 +72,9 @@ void *ThreadPool::threadpool_thread(void *args) {
         pthread_mutex_lock(&lock);
         while (count == 0 && !shutdown) {
             // 解锁之后加入等待队列，触发条件之后又上锁
+            ++waiting_threads;
             pthread_cond_wait(&notify, &lock);
+            --waiting_threads;
         }
         if ((shutdown == immediate_shutdown) || (shutdown == graceful_shutdown && count == 0)) {
             // 唯一出口
@@ -192,4 +195,5 @@ void myHandler(std::shared_ptr<void> req)
 {
     std::shared_ptr<py_middleware> request = std::static_pointer_cast<py_middleware>(req);
     request->handle();
+//    request->test();
 }

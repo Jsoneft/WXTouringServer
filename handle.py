@@ -315,7 +315,10 @@ class MYRequestHandler:
             # 判断是否为特殊的信息
             # 是：返回xml的字符串
             # 否：执行图灵机器人
-            ret = bot.do_specialText(userInfo)
+            try:
+                ret = bot.do_specialText(userInfo)
+            except:
+                ret = ""
 
             # 判断特殊信息是否执行
             if ret != "":
